@@ -23,17 +23,10 @@ class Game:
 
     def _move(self, player: Player):
         column = int(input(f"{player.name} move: "))
-        try:
-            for row in range(len(self.board)-1, -1, -1):
-                if self.board[row][column] == self.DEFAULT_ELEMENT:
-                    self.board[row][column] = player.symbol
-                    break
-                else:
-                    print("It is an impossible move. Retry please")
-                    self._move(player)
-        except IndexError:
-            print("It is an impossible move. Retry please")
-            self._move(player)
+        for row in range(len(self.board)-1, -1, -1):
+            if self.board[row][column] == self.DEFAULT_ELEMENT:
+                self.board[row][column] = player.symbol
+                break
 
     def _check_board(self, player: Player):
         def is_sublist(sublist, mainlist):
