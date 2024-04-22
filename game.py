@@ -8,6 +8,7 @@ Player = namedtuple('Player', ['name', 'symbol'])
 class Game:
     DEFAULT_ELEMENT = "_"
     PLAYERS = []
+    GAME_OVER = False
 
     def __init__(self, board_size: tuple = (7, 6), players_count: int = 2):
         self.board = [[self.DEFAULT_ELEMENT for _ in range(board_size[0])] for _ in range(board_size[1])]
@@ -22,6 +23,8 @@ class Game:
         print('-------------')
 
     def _move(self, player: Player):
+        if self.GAME_OVER:
+            return
         column = int(input(f"{player.name} move: "))
         for row in range(len(self.board)-1, -1, -1):
             if self.board[row][column] == self.DEFAULT_ELEMENT:
@@ -37,6 +40,7 @@ class Game:
         for row in self.board:
             if Counter(row)[player.symbol] == 4 and is_sublist([player.symbol * 4], row):
                 print(f'{player.name} has win!')
+                self.GAME_OVER = True
 
     def start_game(self):
         for player in range(self.players_count):
@@ -45,10 +49,12 @@ class Game:
             self.PLAYERS.append(Player(name, symbol))
 
         while True:
+            if self.GAME_OVER:
+                break
             for player in self.PLAYERS:
                 self._move(player)
-                self._check_board(player)
                 self._print_board()
+                self._check_board(player)
 
 
 game = Game()
